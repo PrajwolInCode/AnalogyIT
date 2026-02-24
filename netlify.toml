@@ -1,0 +1,4 @@
+[build]
+  publish = "."
+
+# Optional: add redirects if you later add a custom domain and want to force HTTPS (Netlify can do this automatically).
