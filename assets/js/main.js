@@ -2,6 +2,139 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
+  // ── Ensure Ticket link appears across all pages ──
+  const ensureTicketLinks = () => {
+    const isTicketHref = (href) => {
+      try {
+        const url = new URL(href || '', window.location.origin);
+        const path = url.pathname.replace(/\/$/, '').toLowerCase();
+        return path.endsWith('/submit-ticket.html');
+      } catch {
+        return false;
+      }
+    };
+
+    const dedupeTicketLinks = (container) => {
+      if (!container) return;
+      const links = Array.from(container.querySelectorAll('a')).filter((a) => isTicketHref(a.getAttribute('href') || ''));
+      links.slice(1).forEach((a) => a.remove());
+    };
+
+    const addLink = (container, href, label, useDataNav = false) => {
+      if (!container) return;
+      dedupeTicketLinks(container);
+      const exists = Array.from(container.querySelectorAll('a')).some(
+        (a) => isTicketHref(a.getAttribute('href') || '')
+      );
+      if (exists) return;
+      const a = document.createElement('a');
+      a.href = href;
+      a.textContent = label;
+      if (useDataNav) a.setAttribute('data-nav', '');
+      container.appendChild(a);
+    };
+
+    $$('.links').forEach((nav) => addLink(nav, 'submit-ticket.html', 'Ticket', true));
+    $$('[data-drawer]').forEach((drawer) => addLink(drawer, 'submit-ticket.html', 'Ticket'));
+
+    // Footer pages column: append Ticket if missing
+    $$('.footer h4').forEach((h4) => {
+      if (h4.textContent?.trim().toLowerCase() !== 'pages') return;
+      const pagesBox = h4.nextElementSibling;
+      if (!(pagesBox instanceof HTMLElement)) return;
+      dedupeTicketLinks(pagesBox);
+      const exists = Array.from(pagesBox.querySelectorAll('a')).some(
+        (a) => isTicketHref(a.getAttribute('href') || '')
+      );
+      if (!exists) {
+        const br = document.createElement('br');
+        const a = document.createElement('a');
+        a.href = 'submit-ticket.html';
+        a.textContent = 'Ticket';
+        pagesBox.appendChild(br);
+        pagesBox.appendChild(a);
+      }
+    });
+  };
+  ensureTicketLinks();
+
+
+  // ── Collapse selected top-nav tabs into a "More" dropdown ──
+  const setupNavDropdowns = () => {
+    const collapseHrefs = new Set([
+      'services.html',
+      'business-setup.html',
+      'pricing.html',
+      'case-studies.html'
+    ]);
+
+    $$('.links').forEach((nav) => {
+      if (nav.querySelector('.nav-more')) return;
+      const anchors = Array.from(nav.querySelectorAll('a'));
+      const toCollapse = anchors.filter((a) => {
+        const href = (a.getAttribute('href') || '').toLowerCase();
+        return collapseHrefs.has(href);
+      });
+      if (!toCollapse.length) return;
+
+      const wrap = document.createElement('div');
+      wrap.className = 'nav-more';
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'nav-more-btn';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-haspopup', 'true');
+      btn.textContent = 'More';
+
+      const menu = document.createElement('div');
+      menu.className = 'nav-more-menu';
+      menu.setAttribute('hidden', '');
+
+      toCollapse.forEach((link) => {
+        const item = link.cloneNode(true);
+        item.classList.remove('active');
+        item.classList.add('nav-more-item');
+        menu.appendChild(item);
+        link.remove();
+      });
+
+      const close = () => {
+        menu.setAttribute('hidden', '');
+        btn.setAttribute('aria-expanded', 'false');
+      };
+      const open = () => {
+        menu.removeAttribute('hidden');
+        btn.setAttribute('aria-expanded', 'true');
+      };
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = !menu.hasAttribute('hidden');
+        isOpen ? close() : open();
+      });
+
+      document.addEventListener('click', (e) => {
+        const t = e.target;
+        if (!(t instanceof Element)) return;
+        if (wrap.contains(t)) return;
+        close();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close();
+      });
+
+      menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+
+      wrap.appendChild(btn);
+      wrap.appendChild(menu);
+      nav.appendChild(wrap);
+    });
+  };
+  setupNavDropdowns();
+
+
   // ── Mobile menu (accessible toggle) ──
   const menuBtn = $('[data-menu]');
   const drawer = $('[data-drawer]');
@@ -21,7 +154,6 @@
   };
 
   if (menuBtn && drawer) {
-    // Ensure IDs for aria-controls
     if (!drawer.id) drawer.id = 'mobile-menu';
     menuBtn.setAttribute('aria-controls', drawer.id);
     menuBtn.setAttribute('aria-expanded', drawer.hasAttribute('hidden') ? 'false' : 'true');
@@ -31,15 +163,12 @@
       isOpen ? closeMenu() : openMenu();
     });
 
-    // Close on link click
     $$('a', drawer).forEach((a) => a.addEventListener('click', closeMenu));
 
-    // Close on Escape
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeMenu();
     });
 
-    // Close when clicking outside (desktop tools / some browsers)
     document.addEventListener('click', (e) => {
       if (drawer.hasAttribute('hidden')) return;
       const target = e.target;
@@ -88,15 +217,12 @@
     els.forEach((el) => el.classList.add('is-visible'));
   }
 
-  
-  // ── Form selects: keep options readable on dark theme ──
   $$('select').forEach((sel) => {
     const update = () => sel.classList.toggle('has-value', Boolean(sel.value));
     update();
     sel.addEventListener('change', update);
   });
 
-  // ── Simple testimonials slider ──
   $$('[data-slider]').forEach((slider) => {
     const track = slider.querySelector('.t-track');
     const slides = Array.from(slider.querySelectorAll('[data-slide]'));
@@ -130,7 +256,6 @@
     set(0);
   });
 
-// ── Back to top ──
   const toTop = document.createElement('button');
   toTop.className = 'to-top';
   toTop.type = 'button';
