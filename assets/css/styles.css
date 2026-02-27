@@ -747,14 +747,14 @@ select:not(.has-value),select:required:invalid{color:#cdd9ef}
 /* Nav dropdown to reduce header crowding */
 .nav{position:relative}
 .links{position:relative}
-.nav-more{position:relative}
+.nav-more{position:relative;display:flex;align-items:center}
 .nav-more-btn{
   padding:.55rem .85rem;border-radius:10px;
   font-weight:700;font-size:.9rem;color:var(--ink);
   border:1px solid rgba(237,243,255,.16);
   background:rgba(255,255,255,.04);cursor:pointer;
 }
-.nav-more-btn:hover{background:rgba(156,192,255,.13);color:var(--accent)}
+.nav-more-btn:hover,.nav-more-btn.active{background:rgba(156,192,255,.13);color:var(--accent)}
 .nav-more-menu{
   position:absolute;top:calc(100% + .45rem);right:0;min-width:220px;
   border:1px solid rgba(148,184,255,.3);

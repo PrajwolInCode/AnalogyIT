@@ -59,79 +59,87 @@
   ensureTicketLinks();
 
 
-  // ── Collapse selected top-nav tabs into a "More" dropdown ──
+  // ── Group related top-nav tabs into dropdowns ──
   const setupNavDropdowns = () => {
-    const collapseHrefs = new Set([
-      'services.html',
-      'business-setup.html',
-      'it-support-geelong.html',
-      'pricing.html',
-      'case-studies.html',
-      'contact.html'
-    ]);
+    const navGroups = [
+      {
+        label: 'Services',
+        hrefs: ['services.html', 'business-setup.html', 'it-support-geelong.html', 'pricing.html']
+      },
+      {
+        label: 'Company',
+        hrefs: ['about.html', 'case-studies.html', 'contact.html']
+      }
+    ];
 
     $$('.links').forEach((nav) => {
       if (nav.querySelector('.nav-more')) return;
-      const anchors = Array.from(nav.querySelectorAll('a'));
-      const toCollapse = anchors.filter((a) => {
-        const href = (a.getAttribute('href') || '').toLowerCase();
-        return collapseHrefs.has(href);
-      });
-      if (!toCollapse.length) return;
 
-      const wrap = document.createElement('div');
-      wrap.className = 'nav-more';
+      const closes = [];
 
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'nav-more-btn';
-      btn.setAttribute('aria-expanded', 'false');
-      btn.setAttribute('aria-haspopup', 'true');
-      btn.textContent = 'More';
+      navGroups.forEach((group) => {
+        const anchors = Array.from(nav.querySelectorAll('a'));
+        const toCollapse = anchors.filter((a) => group.hrefs.includes((a.getAttribute('href') || '').toLowerCase()));
+        if (!toCollapse.length) return;
 
-      const menu = document.createElement('div');
-      menu.className = 'nav-more-menu';
-      menu.setAttribute('hidden', '');
+        const wrap = document.createElement('div');
+        wrap.className = 'nav-more';
 
-      toCollapse.forEach((link) => {
-        const item = link.cloneNode(true);
-        item.classList.remove('active');
-        item.classList.add('nav-more-item');
-        menu.appendChild(item);
-        link.remove();
-      });
-
-      const close = () => {
-        menu.setAttribute('hidden', '');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'nav-more-btn';
         btn.setAttribute('aria-expanded', 'false');
-      };
-      const open = () => {
-        menu.removeAttribute('hidden');
-        btn.setAttribute('aria-expanded', 'true');
-      };
+        btn.setAttribute('aria-haspopup', 'true');
+        btn.textContent = group.label;
 
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = !menu.hasAttribute('hidden');
-        isOpen ? close() : open();
+        const menu = document.createElement('div');
+        menu.className = 'nav-more-menu';
+        menu.setAttribute('hidden', '');
+
+        toCollapse.forEach((link) => {
+          const item = link.cloneNode(true);
+          item.classList.remove('active');
+          item.classList.add('nav-more-item');
+          if (link.classList.contains('active')) btn.classList.add('active');
+          menu.appendChild(item);
+          link.remove();
+        });
+
+        const close = () => {
+          menu.setAttribute('hidden', '');
+          btn.setAttribute('aria-expanded', 'false');
+        };
+        const open = () => {
+          closes.forEach((fn) => fn());
+          menu.removeAttribute('hidden');
+          btn.setAttribute('aria-expanded', 'true');
+        };
+
+        closes.push(close);
+
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpen = !menu.hasAttribute('hidden');
+          isOpen ? close() : open();
+        });
+
+        menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+
+        wrap.appendChild(btn);
+        wrap.appendChild(menu);
+        nav.appendChild(wrap);
       });
 
       document.addEventListener('click', (e) => {
         const t = e.target;
         if (!(t instanceof Element)) return;
-        if (wrap.contains(t)) return;
-        close();
+        if (nav.contains(t)) return;
+        closes.forEach((fn) => fn());
       });
 
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') close();
+        if (e.key === 'Escape') closes.forEach((fn) => fn());
       });
-
-      menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
-
-      wrap.appendChild(btn);
-      wrap.appendChild(menu);
-      nav.appendChild(wrap);
     });
   };
   setupNavDropdowns();
