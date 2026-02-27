@@ -1,4 +1,11 @@
 [build]
   publish = "."
 
-# Optional: add redirects if you later add a custom domain and want to force HTTPS (Netlify can do this automatically).
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200

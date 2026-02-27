@@ -23,7 +23,7 @@
 <div class="field"><label for="ticket-admin-password">Admin password</label><input id="ticket-admin-password" name="password" type="password" required placeholder="Enter password"/></div>
 <button class="btn primary" type="submit">Open Dashboard</button>
 <p id="ticket-login-feedback" class="small" style="margin-top:.8rem"></p>
-<!--<p class="small" style="margin-top:.5rem">Default password: <strong>AnalogyIT@2026</strong> (change it inside <code>assets/js/ticketing.js</code> before production).</p>-->
+<p class="small" style="margin-top:.5rem">Admin password is validated by Netlify Function using environment variables (<code>TICKET_ADMIN_PASSWORD</code> and <code>TICKET_ADMIN_TOKEN</code>).</p>
 </form>
 </div>
 <div class="panel reveal"><h3>Owner access</h3><p>This protects the dashboard from direct public access while still keeping the submit page public.</p><a class="btn" href="submit-ticket.html">Back to ticket form</a></div>

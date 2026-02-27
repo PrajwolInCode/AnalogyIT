@@ -40,6 +40,83 @@
   };
   ensureTicketLinks();
 
+
+  // ── Collapse selected top-nav tabs into a "More" dropdown ──
+  const setupNavDropdowns = () => {
+    const collapseHrefs = new Set([
+      'services.html',
+      'business-setup.html',
+      'pricing.html',
+      'case-studies.html'
+    ]);
+
+    $$('.links').forEach((nav) => {
+      if (nav.querySelector('.nav-more')) return;
+      const anchors = Array.from(nav.querySelectorAll('a'));
+      const toCollapse = anchors.filter((a) => {
+        const href = (a.getAttribute('href') || '').toLowerCase();
+        return collapseHrefs.has(href);
+      });
+      if (!toCollapse.length) return;
+
+      const wrap = document.createElement('div');
+      wrap.className = 'nav-more';
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'nav-more-btn';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-haspopup', 'true');
+      btn.textContent = 'More';
+
+      const menu = document.createElement('div');
+      menu.className = 'nav-more-menu';
+      menu.setAttribute('hidden', '');
+
+      toCollapse.forEach((link) => {
+        const item = link.cloneNode(true);
+        item.classList.remove('active');
+        item.classList.add('nav-more-item');
+        menu.appendChild(item);
+        link.remove();
+      });
+
+      const close = () => {
+        menu.setAttribute('hidden', '');
+        btn.setAttribute('aria-expanded', 'false');
+      };
+      const open = () => {
+        menu.removeAttribute('hidden');
+        btn.setAttribute('aria-expanded', 'true');
+      };
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = !menu.hasAttribute('hidden');
+        isOpen ? close() : open();
+      });
+
+      document.addEventListener('click', (e) => {
+        const t = e.target;
+        if (!(t instanceof Element)) return;
+        if (wrap.contains(t)) return;
+        close();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close();
+      });
+
+      menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+
+      wrap.appendChild(btn);
+      wrap.appendChild(menu);
+      nav.appendChild(wrap);
+    });
+  };
+  setupNavDropdowns();
+
+
   // ── Mobile menu (accessible toggle) ──
   const menuBtn = $('[data-menu]');
   const drawer = $('[data-drawer]');

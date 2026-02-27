@@ -1,8 +1,5 @@
 (() => {
-  const KEY = 'analogyitTickets';
-  const AUTH_KEY = 'analogyitTicketAdminAuth';
-  const ADMIN_PASSWORD = 'AnalogyIT@2026';
-
+  const AUTH_KEY = 'analogyitTicketAdminToken';
   const form = document.querySelector('#ticket-form');
   const list = document.querySelector('#ticket-list');
   const empty = document.querySelector('#empty-state');
@@ -12,38 +9,61 @@
   const addressInput = document.querySelector('#ticket-address');
   const loginForm = document.querySelector('#ticket-login-form');
   const loginFeedback = document.querySelector('#ticket-login-feedback');
-
   const page = (location.pathname.split('/').pop() || '').toLowerCase();
 
-  const isAuthed = () => sessionStorage.getItem(AUTH_KEY) === 'ok';
-  const requireAuth = () => {
+  const api = async (path, opts = {}, requireAuth = false) => {
+    const headers = { 'content-type': 'application/json', ...(opts.headers || {}) };
+    if (requireAuth) {
+      const token = sessionStorage.getItem(AUTH_KEY) || '';
+      if (token) headers['x-admin-token'] = token;
+    }
+    const res = await fetch(path, { ...opts, headers });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'Request failed');
+    return data;
+  };
+
+  const isAuthed = () => Boolean(sessionStorage.getItem(AUTH_KEY));
+
+  const requireAuth = async () => {
     if (page !== 'ticket-dashboard.html') return;
     if (!isAuthed()) {
       const next = encodeURIComponent('ticket-dashboard.html');
       window.location.replace(`ticket-login.html?next=${next}`);
+      return;
+    }
+    try {
+      await api('/api/tickets', { method: 'GET' }, true);
+    } catch {
+      sessionStorage.removeItem(AUTH_KEY);
+      const next = encodeURIComponent('ticket-dashboard.html');
+      window.location.replace(`ticket-login.html?next=${next}`);
     }
   };
+
   requireAuth();
 
   if (loginForm) {
-    loginForm.addEventListener('submit', (e) => {
+    loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const fd = new FormData(loginForm);
-      const pass = String(fd.get('password') || '');
-      if (pass === ADMIN_PASSWORD) {
-        sessionStorage.setItem(AUTH_KEY, 'ok');
+      const password = String(fd.get('password') || '');
+      loginFeedback && (loginFeedback.textContent = 'Signing in...');
+
+      try {
+        const data = await api('/api/auth', {
+          method: 'POST',
+          body: JSON.stringify({ password })
+        });
+        sessionStorage.setItem(AUTH_KEY, String(data.token || ''));
         const next = new URLSearchParams(window.location.search).get('next') || 'ticket-dashboard.html';
         window.location.href = next;
-        return;
+      } catch (err) {
+        loginFeedback && (loginFeedback.textContent = err.message || 'Invalid credentials');
       }
-      if (loginFeedback) loginFeedback.textContent = 'Incorrect password. Please try again.';
     });
   }
 
-  const read = () => {
-    try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { return []; }
-  };
-  const write = (tickets) => localStorage.setItem(KEY, JSON.stringify(tickets));
   const id = () => `TCK-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
 
   if (mode && addressWrap && addressInput) {
@@ -57,7 +77,7 @@
   }
 
   if (form) {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const fd = new FormData(form);
       const ticket = {
@@ -74,24 +94,38 @@
       };
 
       if (!ticket.name || !ticket.phone || !ticket.mode || !ticket.issue || !ticket.details) return;
-      const tickets = read();
-      tickets.unshift(ticket);
-      write(tickets);
-      form.reset();
-      if (feedback) feedback.textContent = `Ticket ${ticket.id} created successfully. You can track it in the dashboard.`;
-      window.setTimeout(() => {
-        window.location.href = 'ticket-dashboard.html';
-      }, 900);
+
+      try {
+        await api('/api/tickets', { method: 'POST', body: JSON.stringify(ticket) });
+        form.reset();
+        if (feedback) feedback.textContent = `Ticket ${ticket.id} created successfully. You can track it in the dashboard.`;
+        window.setTimeout(() => {
+          window.location.href = 'ticket-login.html?next=ticket-dashboard.html';
+        }, 900);
+      } catch (err) {
+        if (feedback) feedback.textContent = err.message || 'Unable to create ticket right now.';
+      }
     });
   }
 
-  const render = (filter = 'all') => {
+  const render = async (filter = 'all') => {
     if (!list) return;
-    const tickets = read().filter((t) => filter === 'all' ? true : t.status === filter);
-    list.innerHTML = '';
-    empty.hidden = tickets.length > 0;
+    let tickets = [];
+    try {
+      const data = await api('/api/tickets', { method: 'GET' }, true);
+      tickets = Array.isArray(data.tickets) ? data.tickets : [];
+    } catch {
+      sessionStorage.removeItem(AUTH_KEY);
+      const next = encodeURIComponent('ticket-dashboard.html');
+      window.location.replace(`ticket-login.html?next=${next}`);
+      return;
+    }
 
-    tickets.forEach((t) => {
+    const filtered = tickets.filter((t) => (filter === 'all' ? true : t.status === filter));
+    list.innerHTML = '';
+    empty.hidden = filtered.length > 0;
+
+    filtered.forEach((t) => {
       const card = document.createElement('article');
       card.className = 'card reveal is-visible';
       card.style.gridColumn = 'span 6';
@@ -116,24 +150,22 @@
     });
   };
 
-  const updateStatus = (ticketId, status, filter) => {
-    const tickets = read().map((t) => t.id === ticketId ? { ...t, status } : t);
-    write(tickets);
-    render(filter);
+  const updateStatus = async (ticketId, status, filter) => {
+    await api('/api/tickets', { method: 'PATCH', body: JSON.stringify({ id: ticketId, status }) }, true);
+    await render(filter);
   };
 
-  const removeTicket = (ticketId, filter) => {
-    const tickets = read().filter((t) => t.id !== ticketId);
-    write(tickets);
-    render(filter);
+  const removeTicket = async (ticketId, filter) => {
+    await api(`/api/tickets?id=${encodeURIComponent(ticketId)}`, { method: 'DELETE' }, true);
+    await render(filter);
   };
 
   if (list) {
     let activeFilter = 'all';
     document.querySelectorAll('[data-filter]').forEach((btn) => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
         activeFilter = btn.getAttribute('data-filter') || 'all';
-        render(activeFilter);
+        await render(activeFilter);
       });
     });
 
