@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<title>Ticket Dashboard | AnalogyIT</title>
+<link rel="stylesheet" href="assets/css/styles.css?v=20260227c"/>
+</head>
+<body>
+<header class="header"><div class="container"><div class="nav">
+<a class="brand" href="index.html"><img src="assets/img/logo.svg" alt="AnalogyIT logo"/><div><strong>AnalogyIT</strong><span>Ticket Dashboard</span></div></a>
+<nav class="links" aria-label="Primary"><a data-nav href="index.html">Home</a><a data-nav href="submit-ticket.html">Submit Ticket</a><a data-nav href="contact.html">Contact</a></nav>
+<div class="cta"><a class="btn small primary" href="submit-ticket.html">New Ticket</a></div>
+</div></div></header>
+<main id="main">
+<section class="pagehead"><div class="container"><h1 class="reveal">SaaS Ticket Dashboard</h1><p class="reveal">Track open, in-progress, and resolved support issues in one place.</p></div></section>
+<section class="section"><div class="container">
+<div class="row reveal" style="margin-bottom:1rem;">
+<button class="btn small" type="button" data-filter="all">All</button>
+<button class="btn small" type="button" data-filter="Open">Open</button>
+<button class="btn small" type="button" data-filter="In Progress">In Progress</button>
+<button class="btn small" type="button" data-filter="Resolved">Resolved</button>
+</div>
+<div class="cards" id="ticket-list"></div>
+<p class="small" id="empty-state" hidden>No tickets yet. Create one from the submit page.</p>
+</div></section>
+</main>
+<footer class="footer"><div class="container"><div class="legal"><div>© <span data-year></span> AnalogyIT</div></div></div></footer>
+<script defer src="assets/js/main.js?v=20260227c"></script>
+<script defer src="assets/js/ticketing.js?v=20260227a"></script>
+</body>
+</html>
