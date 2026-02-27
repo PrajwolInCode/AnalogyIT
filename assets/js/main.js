@@ -64,8 +64,10 @@
     const collapseHrefs = new Set([
       'services.html',
       'business-setup.html',
+      'it-support-geelong.html',
       'pricing.html',
-      'case-studies.html'
+      'case-studies.html',
+      'contact.html'
     ]);
 
     $$('.links').forEach((nav) => {
