@@ -2,6 +2,44 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
+  // ── Ensure Ticket link appears across all pages ──
+  const ensureTicketLinks = () => {
+    const addLink = (container, href, label, useDataNav = false) => {
+      if (!container) return;
+      const exists = Array.from(container.querySelectorAll('a')).some(
+        (a) => (a.getAttribute('href') || '').toLowerCase() === href.toLowerCase()
+      );
+      if (exists) return;
+      const a = document.createElement('a');
+      a.href = href;
+      a.textContent = label;
+      if (useDataNav) a.setAttribute('data-nav', '');
+      container.appendChild(a);
+    };
+
+    $$('.links').forEach((nav) => addLink(nav, 'submit-ticket.html', 'Ticket', true));
+    $$('[data-drawer]').forEach((drawer) => addLink(drawer, 'submit-ticket.html', 'Ticket'));
+
+    // Footer pages column: append Ticket if missing
+    $$('.footer h4').forEach((h4) => {
+      if (h4.textContent?.trim().toLowerCase() !== 'pages') return;
+      const pagesBox = h4.nextElementSibling;
+      if (!(pagesBox instanceof HTMLElement)) return;
+      const exists = Array.from(pagesBox.querySelectorAll('a')).some(
+        (a) => (a.getAttribute('href') || '').toLowerCase() === 'submit-ticket.html'
+      );
+      if (!exists) {
+        const br = document.createElement('br');
+        const a = document.createElement('a');
+        a.href = 'submit-ticket.html';
+        a.textContent = 'Ticket';
+        pagesBox.appendChild(br);
+        pagesBox.appendChild(a);
+      }
+    });
+  };
+  ensureTicketLinks();
+
   // ── Mobile menu (accessible toggle) ──
   const menuBtn = $('[data-menu]');
   const drawer = $('[data-drawer]');
@@ -21,7 +59,6 @@
   };
 
   if (menuBtn && drawer) {
-    // Ensure IDs for aria-controls
     if (!drawer.id) drawer.id = 'mobile-menu';
     menuBtn.setAttribute('aria-controls', drawer.id);
     menuBtn.setAttribute('aria-expanded', drawer.hasAttribute('hidden') ? 'false' : 'true');
@@ -31,15 +68,12 @@
       isOpen ? closeMenu() : openMenu();
     });
 
-    // Close on link click
     $$('a', drawer).forEach((a) => a.addEventListener('click', closeMenu));
 
-    // Close on Escape
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeMenu();
     });
 
-    // Close when clicking outside (desktop tools / some browsers)
     document.addEventListener('click', (e) => {
       if (drawer.hasAttribute('hidden')) return;
       const target = e.target;
@@ -88,15 +122,12 @@
     els.forEach((el) => el.classList.add('is-visible'));
   }
 
-  
-  // ── Form selects: keep options readable on dark theme ──
   $$('select').forEach((sel) => {
     const update = () => sel.classList.toggle('has-value', Boolean(sel.value));
     update();
     sel.addEventListener('change', update);
   });
 
-  // ── Simple testimonials slider ──
   $$('[data-slider]').forEach((slider) => {
     const track = slider.querySelector('.t-track');
     const slides = Array.from(slider.querySelectorAll('[data-slide]'));
@@ -130,7 +161,6 @@
     set(0);
   });
 
-// ── Back to top ──
   const toTop = document.createElement('button');
   toTop.className = 'to-top';
   toTop.type = 'button';

@@ -1,5 +1,8 @@
 (() => {
   const KEY = 'analogyitTickets';
+  const AUTH_KEY = 'analogyitTicketAdminAuth';
+  const ADMIN_PASSWORD = 'AnalogyIT@2026';
+
   const form = document.querySelector('#ticket-form');
   const list = document.querySelector('#ticket-list');
   const empty = document.querySelector('#empty-state');
@@ -7,12 +10,40 @@
   const mode = document.querySelector('#ticket-mode');
   const addressWrap = document.querySelector('#address-wrap');
   const addressInput = document.querySelector('#ticket-address');
+  const loginForm = document.querySelector('#ticket-login-form');
+  const loginFeedback = document.querySelector('#ticket-login-feedback');
+
+  const page = (location.pathname.split('/').pop() || '').toLowerCase();
+
+  const isAuthed = () => sessionStorage.getItem(AUTH_KEY) === 'ok';
+  const requireAuth = () => {
+    if (page !== 'ticket-dashboard.html') return;
+    if (!isAuthed()) {
+      const next = encodeURIComponent('ticket-dashboard.html');
+      window.location.replace(`ticket-login.html?next=${next}`);
+    }
+  };
+  requireAuth();
+
+  if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(loginForm);
+      const pass = String(fd.get('password') || '');
+      if (pass === ADMIN_PASSWORD) {
+        sessionStorage.setItem(AUTH_KEY, 'ok');
+        const next = new URLSearchParams(window.location.search).get('next') || 'ticket-dashboard.html';
+        window.location.href = next;
+        return;
+      }
+      if (loginFeedback) loginFeedback.textContent = 'Incorrect password. Please try again.';
+    });
+  }
 
   const read = () => {
     try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { return []; }
   };
   const write = (tickets) => localStorage.setItem(KEY, JSON.stringify(tickets));
-
   const id = () => `TCK-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
 
   if (mode && addressWrap && addressInput) {
@@ -105,6 +136,13 @@
         render(activeFilter);
       });
     });
+
+    const logoutBtn = document.querySelector('[data-ticket-logout]');
+    logoutBtn?.addEventListener('click', () => {
+      sessionStorage.removeItem(AUTH_KEY);
+      window.location.href = 'ticket-login.html';
+    });
+
     render(activeFilter);
   }
 })();
