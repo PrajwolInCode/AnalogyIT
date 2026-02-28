@@ -1,6 +1,15 @@
 (() => {
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  const normalizeNavHref = (href) => {
+    try {
+      const url = new URL(href || '', window.location.origin);
+      const path = url.pathname.toLowerCase().replace(/\/+$/, '');
+      return path.split('/').pop() || 'index.html';
+    } catch {
+      return String(href || '').toLowerCase().replace(/^\/+/, '').split(/[?#]/)[0];
+    }
+  };
 
   // ── Ensure Ticket link appears across all pages ──
   const ensureTicketLinks = () => {
@@ -79,7 +88,7 @@
 
       navGroups.forEach((group) => {
         const anchors = Array.from(nav.querySelectorAll('a'));
-        const toCollapse = anchors.filter((a) => group.hrefs.includes((a.getAttribute('href') || '').toLowerCase()));
+        const toCollapse = anchors.filter((a) => group.hrefs.includes(normalizeNavHref(a.getAttribute('href'))));
         if (!toCollapse.length) return;
 
         const wrap = document.createElement('div');
@@ -189,10 +198,16 @@
   }
 
   // ── Active nav link ──
-  const path = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  const path = normalizeNavHref(location.pathname || 'index.html');
   $$('a[data-nav]').forEach((a) => {
-    const href = (a.getAttribute('href') || '').toLowerCase();
+    const href = normalizeNavHref(a.getAttribute('href'));
     if (href === path) a.classList.add('active');
+  });
+
+  $$('.nav-more').forEach((wrap) => {
+    const btn = wrap.querySelector('.nav-more-btn');
+    const hasActiveItem = wrap.querySelector('.nav-more-item.active');
+    if (btn && hasActiveItem) btn.classList.add('active');
   });
 
   // ── Footer year ──
