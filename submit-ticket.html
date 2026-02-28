@@ -6,65 +6,68 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-<title>Submit a Ticket | AnalogyIT</title>
+<title>Submit a Support Request | AnalogyIT</title>
 <meta name="description" content="Create a support ticket for IT help, website issues, onsite repair or remote troubleshooting with AnalogyIT."/>
-<link rel="canonical" href="https://www.analogyit.com/submit-ticket.html"/>
+<link rel="canonical" href="https://www.analogyit.com/submit-ticket"/>
 <link rel="stylesheet" href="assets/css/styles.css?v=20260228a"/>
+<style>.hp { display:none !important; }</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="header"><div class="container"><div class="nav">
-<a class="brand" href="index.html"><img src="assets/img/logo.svg" alt="AnalogyIT logo"/><div><strong>AnalogyIT</strong><span>IT Support + Websites</span></div></a>
+<a class="brand" href="/"><img src="assets/img/logo.svg" alt="AnalogyIT logo"/><div><strong>AnalogyIT</strong><span>IT Support + Websites</span></div></a>
 <nav class="links" aria-label="Primary">
-<a data-nav href="index.html">Home</a>
-<a data-nav href="services.html">Services</a>
-<a data-nav href="pricing.html">Pricing</a>
-<a data-nav href="contact.html">Contact</a>
-<a data-nav href="submit-ticket.html">Ticket</a>
+<a data-nav href="/">Home</a>
+<a data-nav href="/services">Services</a>
+<a data-nav href="/pricing">Pricing</a>
+<a data-nav href="/contact">Contact</a>
+<a data-nav href="/submit-ticket">Ticket</a>
 </nav>
-<div class="cta"><a class="btn small ghost" href="tel:+61420749361">Call</a><a class="btn small primary" href="ticket-login.html">Admin Dashboard</a></div>
+<div class="cta"><a class="btn small ghost" href="tel:+61420749361">Call</a><a class="btn small primary" href="/ticket-login">Owner Login</a></div>
 <button class="menu" data-menu aria-label="Open menu">Menu</button>
 </div>
 <div class="drawer" data-drawer hidden>
-<a href="index.html">Home</a><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="contact.html">Contact</a><a href="submit-ticket.html">Ticket</a>
+<a href="/">Home</a><a href="/services">Services</a><a href="/pricing">Pricing</a><a href="/contact">Contact</a><a href="/submit-ticket">Ticket</a>
 </div></div></header>
 
 <main id="main">
 <section class="pagehead"><div class="container">
-<h1 class="reveal">Submit a Support Ticket</h1>
-<p class="reveal">Tell us the issue, add your contact number, and choose remote or onsite support. If onsite is selected, we will use your address to schedule a visit.</p>
+<h1 class="reveal">Submit a Support Request</h1>
+<p class="reveal">Tell me the issue, add your contact number, and choose remote or onsite support. If onsite is selected, I will use your address to schedule a visit.</p>
 </div></section>
 
 <section class="section">
 <div class="container">
 <div class="split">
 <div class="form reveal">
-<form id="ticket-form">
+<form name="support-ticket" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/ticket-success.html">
+<input type="hidden" name="form-name" value="support-ticket"/>
+<p class="hp"><label>Don’t fill this out if you're human: <input name="bot-field"/></label></p>
 <div class="field"><label for="ticket-name">Full name</label><input id="ticket-name" name="name" required type="text" placeholder="Your name"/></div>
-<div class="field"><label for="ticket-phone">Contact number</label><input id="ticket-phone" name="phone" required type="tel" placeholder="04xx xxx xxx"/></div>
-<div class="field"><label for="ticket-mode">Support mode</label>
-<select id="ticket-mode" name="mode" required>
-<option value="" selected disabled>Select support mode…</option>
-<option value="Remote">Remote</option>
-<option value="Onsite">Onsite</option>
+<div class="field"><label for="ticket-email">Email</label><input id="ticket-email" name="email" required type="email" placeholder="you@business.com.au"/></div>
+<div class="field"><label for="ticket-company">Company (optional)</label><input id="ticket-company" name="company" type="text" placeholder="Business name"/></div>
+<div class="field"><label for="ticket-urgency">Urgency</label>
+<select id="ticket-urgency" name="urgency" required>
+<option value="" selected disabled>Select urgency…</option>
+<option value="Low">Low</option>
+<option value="Medium">Medium</option>
+<option value="High">High</option>
+<option value="Critical">Critical</option>
 </select></div>
-<div class="field" id="address-wrap" hidden><label for="ticket-address">Onsite address</label><input id="ticket-address" name="address" type="text" placeholder="Street, suburb, postcode"/></div>
-<div class="field"><label for="ticket-issue">Issue summary</label><input id="ticket-issue" name="issue" required type="text" placeholder="e.g. Outlook not syncing on laptop"/></div>
-<div class="field"><label for="ticket-details">Issue details</label><textarea id="ticket-details" name="details" required placeholder="What happened, when it started, and what you already tried."></textarea></div>
-<div class="field"><label for="ticket-priority">Priority</label>
-<select id="ticket-priority" name="priority" required>
-<option value="Low">Low</option><option value="Medium" selected>Medium</option><option value="High">High</option>
-</select></div>
-<button class="btn primary" type="submit">Create Ticket</button>
-<p id="ticket-feedback" class="small" style="margin-top:.8rem"></p>
+<div class="field"><label for="ticket-subject">Subject</label><input id="ticket-subject" name="subject" required type="text" placeholder="e.g. Microsoft 365 login issue"/></div>
+<div class="field"><label for="ticket-description">Description</label><textarea id="ticket-description" name="description" required placeholder="Please describe the issue, when it started, and any troubleshooting already tried."></textarea></div>
+<div class="field"><label for="ticket-attachment">Attachment (optional)</label><input id="ticket-attachment" name="attachment" type="file"/></div>
+<button class="btn primary" type="submit">Submit Support Request</button>
+<p class="small" style="margin-top:.8rem">By submitting this form you agree to our <a href="/privacy-policy">Privacy Policy</a>.</p>
+<p class="small" style="margin-top:.35rem">Please don’t include passwords or highly sensitive info.</p>
 </form>
 </div>
 <div>
 <div class="panel reveal">
-<h3>Ticketing flow</h3>
-<p>1) You submit a request. 2) We triage and contact you. 3) Work starts after scope confirmation.</p>
-<p class="small">This portal stores tickets in your browser for a lightweight SaaS-style workflow demo.</p>
-<div class="row"><a class="btn" href="ticket-login.html">Open Dashboard</a></div>
+<h3>Support request flow</h3>
+<p>1) You submit a request. 2) I triage and contact you. 3) Work starts after scope confirmation.</p>
+<p class="small">You will receive updates after submission and during resolution.</p>
+<div class="row"><a class="btn" href="/contact">Need urgent help? Contact me</a></div>
 </div>
 </div>
 </div>
@@ -72,8 +75,28 @@
 </section>
 </main>
 
-<footer class="footer"><div class="container"><div class="legal"><div>© <span data-year></span> AnalogyIT</div><div class="small">Geelong VIC</div></div></div></footer>
+<footer class="footer"><div class="container"><div class="foot-grid">
+<div>
+<h4>AnalogyIT</h4>
+<p class="small" style="margin:0 0 .9rem;">Practical IT support and website help for small businesses in Geelong and across Australia.</p>
+</div>
+<div>
+<h4>Contact</h4>
+<p class="small" style="margin:.2rem 0 .4rem;">
+<strong>Phone:</strong> <a href="tel:+61420749361">0420 749 361</a><br/>
+<strong>Email:</strong> <a href="mailto:info@analogyit.com">info@analogyit.com</a>
+</p>
+</div>
+<div>
+<h4>Pages</h4>
+<p class="small" style="margin:.2rem 0 .4rem;">
+<a href="/privacy-policy">Privacy Policy</a><br/>
+<a href="/terms">Terms</a><br/>
+<a href="/contact">Contact</a>
+</p>
+</div>
+</div>
+<div class="legal"><div>© <span data-year></span> AnalogyIT • ABN 55 390 718 578</div><div class="small">Armstrong Creek, VIC</div></div></div></footer>
 <script defer src="assets/js/main.js?v=20260228a"></script>
-<script defer src="assets/js/ticketing.js?v=20260227b"></script>
 </body>
 </html>

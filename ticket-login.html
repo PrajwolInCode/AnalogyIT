@@ -6,31 +6,44 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-<title>Ticket Admin Login | AnalogyIT</title>
+<title>Owner Access Login | AnalogyIT</title>
 <meta name="robots" content="noindex"/>
+<link rel="canonical" href="https://www.analogyit.com/ticket-login"/>
 <link rel="stylesheet" href="assets/css/styles.css?v=20260228a"/>
 </head>
 <body>
 <header class="header"><div class="container"><div class="nav">
-<a class="brand" href="index.html"><img src="assets/img/logo.svg" alt="AnalogyIT logo"/><div><strong>AnalogyIT</strong><span>Ticket Admin</span></div></a>
-<nav class="links" aria-label="Primary"><a data-nav href="index.html">Home</a><a data-nav href="submit-ticket.html">Submit Ticket</a><a data-nav href="ticket-login.html">Ticket Login</a></nav>
+<a class="brand" href="/"><img src="assets/img/logo.svg" alt="AnalogyIT logo"/><div><strong>AnalogyIT</strong><span>Owner Access</span></div></a>
+<nav class="links" aria-label="Primary"><a data-nav href="/">Home</a><a data-nav href="/submit-ticket">Support Request</a><a data-nav href="/ticket-login">Owner Login</a></nav>
 </div></div></header>
 <main id="main">
-<section class="pagehead"><div class="container"><h1 class="reveal">Ticket Dashboard Login</h1><p class="reveal">Enter your admin password to open the dashboard.</p></div></section>
+<section class="pagehead"><div class="container"><h1 class="reveal">Admin area (private)</h1><p class="reveal">This area is private and not available to the public.</p></div></section>
 <section class="section"><div class="container"><div class="split">
-<div class="form reveal">
-<form id="ticket-login-form">
-<div class="field"><label for="ticket-admin-password">Admin password</label><input id="ticket-admin-password" name="password" type="password" required placeholder="Enter password"/></div>
-<button class="btn primary" type="submit">Open Dashboard</button>
-<p id="ticket-login-feedback" class="small" style="margin-top:.8rem"></p>
-<p class="small" style="margin-top:.5rem">Admin password is validated by Netlify Function using environment variables (<code>TICKET_ADMIN_PASSWORD</code> and <code>TICKET_ADMIN_TOKEN</code>).</p>
-</form>
-</div>
-<div class="panel reveal"><h3>Owner access</h3><p>This protects the dashboard from direct public access while still keeping the submit page public.</p><a class="btn" href="submit-ticket.html">Back to ticket form</a></div>
+<div class="panel reveal" style="grid-column:span 12;"><h3>Private access</h3><p>If you need support, please use the <a href="/submit-ticket">Support Request form</a> or <a href="/contact">contact me directly</a>.</p></div>
 </div></div></section>
 </main>
-<footer class="footer"><div class="container"><div class="legal"><div>© <span data-year></span> AnalogyIT</div></div></div></footer>
+<footer class="footer"><div class="container"><div class="foot-grid">
+<div>
+<h4>AnalogyIT</h4>
+<p class="small" style="margin:0 0 .9rem;">Practical IT support and website help for small businesses in Geelong and across Australia.</p>
+</div>
+<div>
+<h4>Contact</h4>
+<p class="small" style="margin:.2rem 0 .4rem;">
+<strong>Phone:</strong> <a href="tel:+61420749361">0420 749 361</a><br/>
+<strong>Email:</strong> <a href="mailto:info@analogyit.com">info@analogyit.com</a>
+</p>
+</div>
+<div>
+<h4>Pages</h4>
+<p class="small" style="margin:.2rem 0 .4rem;">
+<a href="/privacy-policy">Privacy Policy</a><br/>
+<a href="/terms">Terms</a><br/>
+<a href="/contact">Contact</a>
+</p>
+</div>
+</div>
+<div class="legal"><div>© <span data-year></span> AnalogyIT • ABN 55 390 718 578</div><div class="small">Armstrong Creek, VIC</div></div></div></footer>
 <script defer src="assets/js/main.js?v=20260228a"></script>
-<script defer src="assets/js/ticketing.js?v=20260227b"></script>
 </body>
 </html>

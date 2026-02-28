@@ -5,7 +5,7 @@
     try {
       const url = new URL(href || '', window.location.origin);
       const path = url.pathname.toLowerCase().replace(/\/+$/, '');
-      return path.split('/').pop() || 'index.html';
+      return path.split('/').pop() || '';
     } catch {
       return String(href || '').toLowerCase().replace(/^\/+/, '').split(/[?#]/)[0];
     }
@@ -50,8 +50,8 @@
       container.appendChild(a);
     };
 
-    $$('.links').forEach((nav) => addLink(nav, 'submit-ticket.html', 'Ticket', true));
-    $$('[data-drawer]').forEach((drawer) => addLink(drawer, 'submit-ticket.html', 'Ticket'));
+    $$('.links').forEach((nav) => addLink(nav, '/submit-ticket', 'Support', true));
+    $$('[data-drawer]').forEach((drawer) => addLink(drawer, '/submit-ticket', 'Support'));
 
     // Footer pages column: append Ticket if missing
     $$('.footer h4').forEach((h4) => {
@@ -65,8 +65,8 @@
       if (!exists) {
         const br = document.createElement('br');
         const a = document.createElement('a');
-        a.href = 'submit-ticket.html';
-        a.textContent = 'Ticket';
+        a.href = '/submit-ticket';
+        a.textContent = 'Support';
         pagesBox.appendChild(br);
         pagesBox.appendChild(a);
       }
@@ -80,11 +80,11 @@
     const navGroups = [
       {
         label: 'Services',
-        hrefs: ['services.html', 'business-setup.html', 'it-support-geelong.html', 'pricing.html']
+        hrefs: ['/services', '/business-setup', '/it-support-geelong', '/pricing']
       },
       {
         label: 'Company',
-        hrefs: ['about.html', 'case-studies.html', 'contact.html']
+        hrefs: ['/about', '/case-studies', '/contact']
       }
     ];
 
@@ -206,7 +206,7 @@
   }
 
   // ── Active nav link ──
-  const path = normalizeNavHref(location.pathname || 'index.html');
+  const path = normalizeNavHref(location.pathname || '');
   $$('a[data-nav]').forEach((a) => {
     const href = normalizeNavHref(a.getAttribute('href'));
     if (href === path) a.classList.add('active');
