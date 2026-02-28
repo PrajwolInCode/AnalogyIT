@@ -14,14 +14,20 @@
 
   // ── Ensure Ticket link appears across all pages ──
   const ensureTicketLinks = () => {
-    const isTicketHref = (href) => {
+    const normalizeTicketPath = (href) => {
       try {
         const url = new URL(href || '', window.location.origin);
-        const path = url.pathname.replace(/\/$/, '').toLowerCase();
-        return path.endsWith('/submit-ticket.html');
+        const raw = url.pathname.toLowerCase().replace(/\/+$/, '');
+        const path = raw.endsWith('.html') ? raw.slice(0, -5) : raw;
+        return path;
       } catch {
-        return false;
+        return '';
       }
+    };
+
+    const isTicketHref = (href) => {
+      const path = normalizeTicketPath(href);
+      return path.endsWith('/submit-ticket') || path.endsWith('/ticket');
     };
 
     const dedupeTicketLinks = (container) => {
