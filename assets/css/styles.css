@@ -405,6 +405,7 @@ h1{
   color:#fff;
 }
 @media(max-width:980px){
+  .map-wrap iframe{min-height:280px;height:280px}
   .showcase-grid{grid-template-columns:1fr}
 }
 
@@ -471,6 +472,10 @@ h2{margin:0 0 .6rem;font-size:clamp(1.7rem,3vw,2.3rem);letter-spacing:-.6px}
 }
 .panel h3{margin:.1rem 0 .45rem}
 .panel p{margin:0 0 1rem;color:var(--muted)}
+
+.map-wrap{width:100%;max-width:1100px;margin:12px auto 0}
+.map-wrap iframe{display:block;width:100%;min-height:320px;height:320px;border:0;border-radius:14px}
+
 
 /* ── Steps ── */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
