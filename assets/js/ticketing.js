@@ -26,18 +26,18 @@
   const isAuthed = () => Boolean(sessionStorage.getItem(AUTH_KEY));
 
   const requireAuth = async () => {
-    if (page !== 'ticket-dashboard.html') return;
+    if (page !== 'ticket-dashboard') return;
     if (!isAuthed()) {
-      const next = encodeURIComponent('ticket-dashboard.html');
-      window.location.replace(`ticket-login.html?next=${next}`);
+      const next = encodeURIComponent('/ticket-dashboard');
+      window.location.replace(`/ticket-login?next=${next}`);
       return;
     }
     try {
       await api('/api/tickets', { method: 'GET' }, true);
     } catch {
       sessionStorage.removeItem(AUTH_KEY);
-      const next = encodeURIComponent('ticket-dashboard.html');
-      window.location.replace(`ticket-login.html?next=${next}`);
+      const next = encodeURIComponent('/ticket-dashboard');
+      window.location.replace(`/ticket-login?next=${next}`);
     }
   };
 
@@ -56,7 +56,7 @@
           body: JSON.stringify({ password })
         });
         sessionStorage.setItem(AUTH_KEY, String(data.token || ''));
-        const next = new URLSearchParams(window.location.search).get('next') || 'ticket-dashboard.html';
+        const next = new URLSearchParams(window.location.search).get('next') || '/ticket-dashboard';
         window.location.href = next;
       } catch (err) {
         loginFeedback && (loginFeedback.textContent = err.message || 'Invalid credentials');
@@ -98,9 +98,9 @@
       try {
         await api('/api/tickets', { method: 'POST', body: JSON.stringify(ticket) });
         form.reset();
-        if (feedback) feedback.textContent = `Ticket ${ticket.id} created successfully. You can track it in the dashboard.`;
+        if (feedback) feedback.textContent = `Request ${ticket.id} submitted successfully. I will follow up with next steps soon.`;
         window.setTimeout(() => {
-          window.location.href = 'ticket-login.html?next=ticket-dashboard.html';
+          window.location.href = '/ticket-login?next=/ticket-dashboard';
         }, 900);
       } catch (err) {
         if (feedback) feedback.textContent = err.message || 'Unable to create ticket right now.';
@@ -116,8 +116,8 @@
       tickets = Array.isArray(data.tickets) ? data.tickets : [];
     } catch {
       sessionStorage.removeItem(AUTH_KEY);
-      const next = encodeURIComponent('ticket-dashboard.html');
-      window.location.replace(`ticket-login.html?next=${next}`);
+      const next = encodeURIComponent('/ticket-dashboard');
+      window.location.replace(`/ticket-login?next=${next}`);
       return;
     }
 
@@ -172,7 +172,7 @@
     const logoutBtn = document.querySelector('[data-ticket-logout]');
     logoutBtn?.addEventListener('click', () => {
       sessionStorage.removeItem(AUTH_KEY);
-      window.location.href = 'ticket-login.html';
+      window.location.href = '/ticket-login';
     });
 
     render(activeFilter);

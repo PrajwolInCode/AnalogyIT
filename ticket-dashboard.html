@@ -6,17 +6,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-<title>Ticket Dashboard | AnalogyIT</title>
+<title>Support Request Board | AnalogyIT</title>
+<link rel="canonical" href="https://www.analogyit.com/ticket-dashboard"/>
 <link rel="stylesheet" href="assets/css/styles.css?v=20260228a"/>
 </head>
 <body>
 <header class="header"><div class="container"><div class="nav">
-<a class="brand" href="index.html"><img src="assets/img/logo.svg" alt="AnalogyIT logo"/><div><strong>AnalogyIT</strong><span>Ticket Dashboard</span></div></a>
-<nav class="links" aria-label="Primary"><a data-nav href="index.html">Home</a><a data-nav href="submit-ticket.html">Submit Ticket</a><a data-nav href="contact.html">Contact</a></nav>
-<div class="cta"><a class="btn small" href="submit-ticket.html">New Ticket</a><button class="btn small primary" type="button" data-ticket-logout>Logout</button></div>
+<a class="brand" href="/"><img src="assets/img/logo.svg" alt="AnalogyIT logo"/><div><strong>AnalogyIT</strong><span>Ticket Dashboard</span></div></a>
+<nav class="links" aria-label="Primary"><a data-nav href="/">Home</a><a data-nav href="/submit-ticket">Support Request</a><a data-nav href="/contact">Contact</a></nav>
+<div class="cta"><a class="btn small" href="/submit-ticket">New Request</a><button class="btn small primary" type="button" data-ticket-logout>Logout</button></div>
 </div></div></header>
 <main id="main">
-<section class="pagehead"><div class="container"><h1 class="reveal">SaaS Ticket Dashboard</h1><p class="reveal">Track open, in-progress, and resolved support issues in one place.</p></div></section>
+<section class="pagehead"><div class="container"><h1 class="reveal">Support Request Board</h1><p class="reveal">Track open, in-progress, and resolved support requests in one place.</p></div></section>
 <section class="section"><div class="container">
 <div class="row reveal" style="margin-bottom:1rem;">
 <button class="btn small" type="button" data-filter="all">All</button>
@@ -25,10 +26,31 @@
 <button class="btn small" type="button" data-filter="Resolved">Resolved</button>
 </div>
 <div class="cards" id="ticket-list"></div>
-<p class="small" id="empty-state" hidden>No tickets yet. Create one from the submit page.</p>
+<p class="small" id="empty-state" hidden>No requests yet. Create one from the support request form.</p>
 </div></section>
 </main>
-<footer class="footer"><div class="container"><div class="legal"><div>© <span data-year></span> AnalogyIT</div></div></div></footer>
+<footer class="footer"><div class="container"><div class="foot-grid">
+<div>
+<h4>AnalogyIT</h4>
+<p class="small" style="margin:0 0 .9rem;">Practical IT support and website help for small businesses in Geelong and across Australia.</p>
+</div>
+<div>
+<h4>Contact</h4>
+<p class="small" style="margin:.2rem 0 .4rem;">
+<strong>Phone:</strong> <a href="tel:+61420749361">0420 749 361</a><br/>
+<strong>Email:</strong> <a href="mailto:info@analogyit.com">info@analogyit.com</a>
+</p>
+</div>
+<div>
+<h4>Pages</h4>
+<p class="small" style="margin:.2rem 0 .4rem;">
+<a href="/privacy-policy">Privacy Policy</a><br/>
+<a href="/terms">Terms</a><br/>
+<a href="/contact">Contact</a>
+</p>
+</div>
+</div>
+<div class="legal"><div>© <span data-year></span> AnalogyIT • ABN 55 390 718 578</div><div class="small">Armstrong Creek, VIC</div></div></div></footer>
 <script defer src="assets/js/main.js?v=20260228a"></script>
 <script defer src="assets/js/ticketing.js?v=20260227b"></script>
 </body>

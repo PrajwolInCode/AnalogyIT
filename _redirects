@@ -1,4 +1,44 @@
 https://analogyit.com/* https://www.analogyit.com/:splat 301!
-/it-support-geelong  /it-support-geelong.html  301
-/active-directory  /business-setup.html  301
-/active-directory.html  /business-setup.html  301
+
+# Canonical extensionless URLs
+/about /about.html 200
+/services /services.html 200
+/business-setup /business-setup.html 200
+/it-support-geelong /it-support-geelong.html 200
+/pricing /pricing.html 200
+/case-studies /case-studies.html 200
+/contact /contact.html 200
+/resources /resources.html 200
+/faqs /faqs.html 200
+/privacy-policy /privacy-policy.html 200
+/terms /terms.html 200
+/submit-ticket /submit-ticket.html 200
+/ticket-login /ticket-login.html 200
+/ticket-dashboard /ticket-dashboard.html 200
+/network-setup /network-setup.html 200
+/business-email-setup /business-email-setup.html 200
+/thank-you /thank-you.html 200
+
+# Legacy .html URLs redirected to canonical extensionless paths
+/about.html /about 301
+/services.html /services 301
+/business-setup.html /business-setup 301
+/it-support-geelong.html /it-support-geelong 301
+/pricing.html /pricing 301
+/case-studies.html /case-studies 301
+/contact.html /contact 301
+/resources.html /resources 301
+/faqs.html /faqs 301
+/privacy-policy.html /privacy-policy 301
+/terms.html /terms 301
+/submit-ticket.html /submit-ticket 301
+/ticket-login.html /ticket-login 301
+/ticket-dashboard.html /ticket-dashboard 301
+/network-setup.html /network-setup 301
+/business-email-setup.html /business-email-setup 301
+/thank-you.html /thank-you 301
+/index.html / 301
+
+# Consolidated page aliases
+/active-directory /business-setup 301
+/active-directory.html /business-setup 301
