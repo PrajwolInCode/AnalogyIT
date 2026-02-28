@@ -10,6 +10,7 @@
       return String(href || '').toLowerCase().replace(/^\/+/, '').split(/[?#]/)[0];
     }
   };
+  const normalizeNavKey = (href) => normalizeNavHref(href).replace(/\.html$/, '');
 
   // ── Ensure Ticket link appears across all pages ──
   const ensureTicketLinks = () => {
@@ -87,8 +88,9 @@
       const closes = [];
 
       navGroups.forEach((group) => {
+        const groupedKeys = group.hrefs.map((href) => normalizeNavKey(href));
         const anchors = Array.from(nav.querySelectorAll('a'));
-        const toCollapse = anchors.filter((a) => group.hrefs.includes(normalizeNavHref(a.getAttribute('href'))));
+        const toCollapse = anchors.filter((a) => groupedKeys.includes(normalizeNavKey(a.getAttribute('href'))));
         if (!toCollapse.length) return;
 
         const wrap = document.createElement('div');
