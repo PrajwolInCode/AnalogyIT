@@ -50,8 +50,8 @@
       container.appendChild(a);
     };
 
-    $$('.links').forEach((nav) => addLink(nav, '/submit-ticket', 'Ticket', true));
-    $$('[data-drawer]').forEach((drawer) => addLink(drawer, '/submit-ticket', 'Ticket'));
+    $$('.links').forEach((nav) => addLink(nav, '/submit-ticket', 'Support', true));
+    $$('[data-drawer]').forEach((drawer) => addLink(drawer, '/submit-ticket', 'Support'));
 
     // Footer pages column: append Ticket if missing
     $$('.footer h4').forEach((h4) => {
@@ -66,7 +66,7 @@
         const br = document.createElement('br');
         const a = document.createElement('a');
         a.href = '/submit-ticket';
-        a.textContent = 'Ticket';
+        a.textContent = 'Support';
         pagesBox.appendChild(br);
         pagesBox.appendChild(a);
       }

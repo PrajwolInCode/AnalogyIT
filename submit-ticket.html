@@ -10,6 +10,7 @@
 <meta name="description" content="Create a support ticket for IT help, website issues, onsite repair or remote troubleshooting with AnalogyIT."/>
 <link rel="canonical" href="https://www.analogyit.com/submit-ticket"/>
 <link rel="stylesheet" href="assets/css/styles.css?v=20260228a"/>
+<style>.hp { display:none !important; }</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -39,26 +40,26 @@
 <div class="container">
 <div class="split">
 <div class="form reveal">
-<form id="ticket-form">
+<form name="support-ticket" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/ticket-success.html">
+<input type="hidden" name="form-name" value="support-ticket"/>
+<p class="hp"><label>Don’t fill this out if you're human: <input name="bot-field"/></label></p>
 <div class="field"><label for="ticket-name">Full name</label><input id="ticket-name" name="name" required type="text" placeholder="Your name"/></div>
-<div class="field"><label for="ticket-phone">Contact number</label><input id="ticket-phone" name="phone" required type="tel" placeholder="04xx xxx xxx"/></div>
-<div class="field"><label for="ticket-mode">Support mode</label>
-<select id="ticket-mode" name="mode" required>
-<option value="" selected disabled>Select support mode…</option>
-<option value="Remote">Remote</option>
-<option value="Onsite">Onsite</option>
+<div class="field"><label for="ticket-email">Email</label><input id="ticket-email" name="email" required type="email" placeholder="you@business.com.au"/></div>
+<div class="field"><label for="ticket-company">Company (optional)</label><input id="ticket-company" name="company" type="text" placeholder="Business name"/></div>
+<div class="field"><label for="ticket-urgency">Urgency</label>
+<select id="ticket-urgency" name="urgency" required>
+<option value="" selected disabled>Select urgency…</option>
+<option value="Low">Low</option>
+<option value="Medium">Medium</option>
+<option value="High">High</option>
+<option value="Critical">Critical</option>
 </select></div>
-<div class="field" id="address-wrap" hidden><label for="ticket-address">Onsite address</label><input id="ticket-address" name="address" type="text" placeholder="Street, suburb, postcode"/></div>
-<div class="field"><label for="ticket-issue">Issue summary</label><input id="ticket-issue" name="issue" required type="text" placeholder="e.g. Outlook not syncing on laptop"/></div>
-<div class="field"><label for="ticket-details">Issue details</label><textarea id="ticket-details" name="details" required placeholder="What happened, when it started, and what you already tried."></textarea></div>
-<div class="field"><label for="ticket-priority">Priority</label>
-<select id="ticket-priority" name="priority" required>
-<option value="Low">Low</option><option value="Medium" selected>Medium</option><option value="High">High</option>
-</select></div>
+<div class="field"><label for="ticket-subject">Subject</label><input id="ticket-subject" name="subject" required type="text" placeholder="e.g. Microsoft 365 login issue"/></div>
+<div class="field"><label for="ticket-description">Description</label><textarea id="ticket-description" name="description" required placeholder="Please describe the issue, when it started, and any troubleshooting already tried."></textarea></div>
+<div class="field"><label for="ticket-attachment">Attachment (optional)</label><input id="ticket-attachment" name="attachment" type="file"/></div>
 <button class="btn primary" type="submit">Submit Support Request</button>
 <p class="small" style="margin-top:.8rem">By submitting this form you agree to our <a href="/privacy-policy">Privacy Policy</a>.</p>
-<p class="small" style="margin-top:.35rem">Don’t include passwords or highly sensitive info.</p>
-<p id="ticket-feedback" class="small" style="margin-top:.8rem"></p>
+<p class="small" style="margin-top:.35rem">Please don’t include passwords or highly sensitive info.</p>
 </form>
 </div>
 <div>
@@ -66,7 +67,7 @@
 <h3>Support request flow</h3>
 <p>1) You submit a request. 2) I triage and contact you. 3) Work starts after scope confirmation.</p>
 <p class="small">You will receive updates after submission and during resolution.</p>
-<div class="row"><a class="btn" href="/ticket-login">Owner login</a></div>
+<div class="row"><a class="btn" href="/contact">Need urgent help? Contact me</a></div>
 </div>
 </div>
 </div>
@@ -97,6 +98,5 @@
 </div>
 <div class="legal"><div>© <span data-year></span> AnalogyIT • ABN 55 390 718 578</div><div class="small">Armstrong Creek, VIC</div></div></div></footer>
 <script defer src="assets/js/main.js?v=20260228a"></script>
-<script defer src="assets/js/ticketing.js?v=20260227b"></script>
 </body>
 </html>
